@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="widht=device-width, user-scalable-no, initial-scale-1.0, maximun-scale-1.0, minimun-scale-1.0">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <style type="text/css">
+    body>nav>h1{
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body background="blue.jpg">
+<nav>
+  <h1><a href="indexa.html" target="_blank">Abrir chat</a></h1>
+</nav>
+
+  <ul class="pages">
+    <li class="chat page">
+      <div class="chatArea">
+        <ul class="messages"></ul>
+      </div>
+      <input class="inputMessage" placeholder="Escribir aqui....."/>
+    </li>
+    <li class="login page">
+      <div class="form">
+        <h4 class="title">escriba su nombre </h4>
+        <input class="usernameInput" type="text" maxlength="14" />
+      </div>
+    </li>
+  </ul>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Emisión</title>
+	<meta name="viewport" content="widht=device-width, user-scalable-no, initial-scale-1.0, maximun-scale-1.0, minimun-scale-1.0">
+	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<style type="text/css">
+.contenedor{
+	width: 80%;
+	max-width: 900px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+body>div>header{
+	left: 35%;
+	position: absolute;
+	width: 100%;
+}
+	body>div>header>h1{
+		margin: 0px;
+		text-align: center;
+		font-size: 70px;
+		text-shadow: 3px 3px 2px silver;
+		position: absolute;
+		animation: mueve 5s infinite linear;
+	}
+	@keyframes mueve{0%{left:40px;top:20px;font-size:40px;}
+									25%{left:200px;top:30px;font-size:60px;}
+									50%{left:200px;top:60px;font-size:40px;}
+									75%{left:50px;top:50px;font-size:40px;}
+									100%{left:50px;top:30px;font-size:40px;}
+				}
+	body{
+		background-image: url(img/luces.jpg);
+	}
+	body>div>aside{
+		
+		background: linear-gradient(black,gray,lightgreen, lightblue, gray,black);
+		top: 200px; left: 66%; width: 450px;
+		min-height: 300px;
+		height: 320px;
+		box-sizing: border-box;
+		position: absolute;
+	}	
+	body>div>aside>section{
+		right: 20px;		width: 560px;
+		height: 525px;		position: relative;
+		top: 30px;
+		box-sizing: border-box;
+	}
+	body>div>section{
+		position: absolute;
+		top: 100px;		width: 800px;
+		height: 800px;	left: 20px;
+		box-sizing: border-box;
+	}
+	body>div>section>article{
+
+		left: 50px;
+		box-sizing: border-box;
+	}
+	body>div>section>article>img{
+		left: 80%;top: 380px; 
+	}
+	body>div>nav>div{
+		box-sizing: border-box;
+		top: 200px;position: absolute;left: 78%;
+	}
+</style>
+</head>
+<body>
+<div class="contenedor">
+<header><h1> * GCH * </h1></header>
+
+	<p><a href="javascript:window.open('visualizar.html','toolbar=yes');void 0" style="text-decoration: none; color: steelblue; font-size: 25px;" >Ver Transmision</a></p>
+<nav>
+	<div>
+	<img src="img/enProceso.gif" style="width: 20%; height: 20%; ">
+	</div>
+</nav>
+<section>
+<article>
+<img src="img/engranajes.gif" style="width: 10%; height: 10%; position: absolute;">
+</article>
+	<img src="img/bosque.jpg" style="width:70%; height: 50%; padding: 5PX; border: 2px;" >
+
+</section>
+<aside>
+<section>
+	<video src="" id="video" style="width: 500px; height: 250px; " autoplay="true"></video>
+
+	<canvas style="display: none;" id="preview"></canvas>
+	<div id="logger"></div>
+
+	<script type="text/javascript">
+		
+		var canvas = document.getElementById("preview");
+		var context = canvas.getContext("2d");
+
+		canvas.width = 800;
+		canvas.height = 600;
+
+		context.width = canvas.width;
+		context.height = canvas.height;
+
+		var video = document.getElementById("video");
+		var socket = io();
+
+		function logger(msg){
+			$("#logger").text(msg);
+		}
+
+		function loadCam(stream){
+			video.src = window.URL.createObjectURL(stream);
+			logger('Cámara cargada correctamente [OK]');
+		}
+
+		function loadFail(){
+			logger('Por favor revise... Fallas técnicas')
+		};
+
+		function viewVideo(video,context){
+			context.drawImage(video, 0,0,context.width,context.height);
+			socket.emit('stream',canvas.toDataURL('image/webp'));
+		};
+
+		$(function(){
+			navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msgGetUserMedia);
+			if (navigator.getUserMedia) {
+				navigator.getUserMedia({video : true}, loadCam,loadFail)
+			}
+
+			setInterval(function(){
+				viewVideo(video,context);
+			},40);
+		});
+	</script>
+	</section>
+</aside>
+</div>
+</body>
+</html>
